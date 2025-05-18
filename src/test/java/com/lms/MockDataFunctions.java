@@ -1,5 +1,6 @@
 package com.lms;
 
+import com.lms.constants.constants;
 import com.lms.persistence.LoginUserDto;
 import com.lms.persistence.OtpRequest;
 import com.lms.persistence.RegisterUserDto;
@@ -55,7 +56,7 @@ public class MockDataFunctions {
                 .setFirstName("Test")
                 .setLastName("User")
                 .setPassword("password123")
-                .setRole("Student");
+                .setRole(constants.ROLE_STUDENT);
     }
 
     public static Optional<User> mockOptionalUser(String id, String email) {

@@ -1,6 +1,7 @@
 package com.lms.presentation;
 
 import com.lms.business.models.AssignmentSubmissionModel;
+import com.lms.constants.constants;
 import com.lms.events.CourseNotificationEvent;
 import com.lms.events.NotificationEvent;
 import com.lms.persistence.User;
@@ -38,12 +39,12 @@ public class AssignmentSubmissionController {
         if (currentUser.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body("Not authenticated");
+                    .body(constants.ERROR_NOT_AUTHENTICATED);
         }
-        if (!"Student".equals(currentUser.get().getRole())) {
+        if (!constants.ROLE_STUDENT.equals(currentUser.get().getRole())) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
-                    .body("Access Denied: You are unauthorized");
+                    .body(constants.ERROR_UNAUTHORIZED);
         }
 
         if (service.findAssignmentById(assignmentId) == null) {
@@ -67,9 +68,9 @@ public class AssignmentSubmissionController {
         ) {
             // Publish a notification event for all students enrolled in the course
             String studentMessage = "You Submitted Assignment: " + assignmentId + " Successfully";
-            eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), studentMessage, "EMAIL"));
+            eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), studentMessage,constants.FIELD_EMAIL));
             String instructorMessage = "Student " + currentUser.get().getFirstName() + " has submitted assignment " + assignmentId;
-            eventPublisher.publishEvent(new NotificationEvent(this, service.findAssignmentById(assignmentId).getInstructorId(), instructorMessage, "EMAIL"));
+            eventPublisher.publishEvent(new NotificationEvent(this, service.findAssignmentById(assignmentId).getInstructorId(), instructorMessage,constants.FIELD_EMAIL));
 
             return ResponseEntity.ok("Assignment submitted successfully.");
         } else {
@@ -89,10 +90,10 @@ public class AssignmentSubmissionController {
                     .status(HttpStatus.UNAUTHORIZED)
                     .body(Collections.emptyList());
         }
-        if (!"Instructor".equals(currentUser.get().getRole())) {
+        if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
-                    .body("Access Denied: You are unauthorized");
+                    .body(constants.ERROR_UNAUTHORIZED);
         }
 
         if (service.findAssignmentById(assignmentId) == null) {
@@ -115,12 +116,12 @@ public class AssignmentSubmissionController {
         if (currentUser.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body("Not authenticated");
+                    .body(constants.ERROR_NOT_AUTHENTICATED);
         }
-        if (!"Instructor".equals(currentUser.get().getRole())) {
+        if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
-                    .body("Access Denied: You are unauthorized");
+                    .body(constants.ERROR_UNAUTHORIZED);
         }
 
         AssignmentEntity assignmentEntity = service.findAssignmentById(assignmentId);
@@ -151,9 +152,9 @@ public class AssignmentSubmissionController {
 
         if (service.updateAssignmentSubmission(submission)) {
             String studentMessage = "Your Assignment: " + assignmentEntity.getId() + " \"" + assignmentEntity.getTitle() + "\"" + " has been marked, You got score: " + submission.getScore() + " of " + assignmentEntity.getGrade() + " and the feedback is : " + submission.getFeedback();
-            eventPublisher.publishEvent(new NotificationEvent(this, submission.getStudentId(), studentMessage, "EMAIL"));
+            eventPublisher.publishEvent(new NotificationEvent(this, submission.getStudentId(), studentMessage,constants.FIELD_EMAIL));
             String instructorMessage = "You marked Assignment: " + assignmentEntity.getId() + " \"" + assignmentEntity.getTitle() + "\"" + " for student " + submission.getStudentId() + " successfully" ;
-            eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), instructorMessage, "EMAIL"));
+            eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), instructorMessage,constants.FIELD_EMAIL));
 
             return ResponseEntity.ok("Assignment submission updated successfully.");
         } else {

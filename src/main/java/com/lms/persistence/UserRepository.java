@@ -1,5 +1,6 @@
 package com.lms.persistence;
 
+import com.lms.constants.constants;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
@@ -66,7 +67,7 @@ public class UserRepository {
     public List<String> getAllStudentIds() {
         return users
         .stream()
-        .filter(user -> "Student".equals(user.getRole()))
+        .filter(user -> constants.ROLE_STUDENT.equals(user.getRole()))
         .map(User::getId)
         .collect(Collectors.toList());
     }

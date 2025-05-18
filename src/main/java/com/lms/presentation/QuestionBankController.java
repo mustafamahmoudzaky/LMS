@@ -1,6 +1,7 @@
 package com.lms.presentation;
 
 import com.lms.business.models.QuestionRequest;
+import com.lms.constants.constants;
 import com.lms.persistence.User;
 import com.lms.persistence.entities.questions.Question;
 import com.lms.persistence.entities.questions.QuestionFactory;
@@ -31,17 +32,17 @@ public class QuestionBankController {
     if (currentUser.isEmpty()) {
       return ResponseEntity
         .status(HttpStatus.UNAUTHORIZED)
-        .body("Not authenticated");
+        .body(constants.ERROR_NOT_AUTHENTICATED);
     }
 
-    if (!"Instructor".equals(currentUser.get().getRole())) {
+    if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
       return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
-        .body("Access Denied: You are unauthorized");
+        .body(constants.ERROR_UNAUTHORIZED);
     }
 
     if (service.findCourseById(courseId) == null) {
-      return ResponseEntity.badRequest().body("Course not found");
+      return ResponseEntity.badRequest().body(constants.ERROR_COURSE_NOT_FOUND);
     }
 
     Question question = QuestionFactory.createQuestion(
@@ -62,17 +63,17 @@ public class QuestionBankController {
     if (currentUser.isEmpty()) {
       return ResponseEntity
         .status(HttpStatus.UNAUTHORIZED)
-        .body("Not authenticated");
+        .body(constants.ERROR_NOT_AUTHENTICATED);
     }
 
-    if (!"Instructor".equals(currentUser.get().getRole())) {
+    if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
       return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
-        .body("Access Denied: You are unauthorized");
+        .body(constants.ERROR_UNAUTHORIZED);
     }
 
     if (service.findCourseById(courseId) == null) {
-      return ResponseEntity.badRequest().body("Course not found");
+      return ResponseEntity.badRequest().body(constants.ERROR_COURSE_NOT_FOUND);
     }
 
     for (QuestionRequest questionRequest : questionRequests) {
@@ -95,15 +96,15 @@ public class QuestionBankController {
     if (currentUser.isEmpty()) {
       return ResponseEntity
         .status(HttpStatus.UNAUTHORIZED)
-        .body("Not authenticated");
+        .body(constants.ERROR_NOT_AUTHENTICATED);
     }
-    if (!"Instructor".equals(currentUser.get().getRole())) {
+    if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
       return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
-        .body("Access Denied: You are unauthorized");
+        .body(constants.ERROR_UNAUTHORIZED);
     }
     if (service.findCourseById(courseId) == null) {
-      return ResponseEntity.badRequest().body("Course not found");
+      return ResponseEntity.badRequest().body(constants.ERROR_COURSE_NOT_FOUND);
     }
     service.deleteQuestion(courseId, questionId);
     return ResponseEntity.ok("Question deleted successfully.");
@@ -118,15 +119,15 @@ public class QuestionBankController {
         .body(Collections.emptyList());
     }
     if (
-      !"Instructor".equals(currentUser.get().getRole()) &&
-      !"Student".equals(currentUser.get().getRole())
+      !constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole()) &&
+      !constants.ROLE_STUDENT.equals(currentUser.get().getRole())
     ) {
       return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
-        .body("Access Denied: You are unauthorized");
+        .body(constants.ERROR_UNAUTHORIZED);
     }
     if (service.findCourseById(courseId) == null) {
-      return ResponseEntity.badRequest().body("Course not found");
+      return ResponseEntity.badRequest().body(constants.ERROR_COURSE_NOT_FOUND);
     }
     return ResponseEntity.ok(service.getQuestions(courseId));
   }

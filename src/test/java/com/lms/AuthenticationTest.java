@@ -1,5 +1,6 @@
 package com.lms;
 
+import com.lms.constants.constants;
 import com.lms.persistence.LoginResponse;
 import com.lms.persistence.LoginUserDto;
 import com.lms.persistence.RegisterUserDto;
@@ -40,11 +41,11 @@ class AuthenticationTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        signUpAdminData = MockDataFunctions.mockRegisteredUser("A01", "Ahmed", "Elbeltagy", "ahmed@gmail.com", "password123", "Admin");
-        createStudentData = MockDataFunctions.mockRegisteredUser("S01", "Laila", "Khaled", "laila@gmail.com", "password123", "Student");
-        signedUpAdmin = MockDataFunctions.mockAddedUser("A01", "ahmed@gmail.com", "Admin");
+        signUpAdminData = MockDataFunctions.mockRegisteredUser("A01", "Ahmed", "Elbeltagy", "ahmed@gmail.com", "password123", constants.ROLE_ADMIN);
+        createStudentData = MockDataFunctions.mockRegisteredUser("S01", "Laila", "Khaled", "laila@gmail.com", "password123", constants.ROLE_STUDENT);
+        signedUpAdmin = MockDataFunctions.mockAddedUser("A01", "ahmed@gmail.com", constants.ROLE_ADMIN);
         loginUser = MockDataFunctions.mockLoggedInUser("laila@gmail.com", "password123");
-        loggedInUser = MockDataFunctions.mockAddedUser("S01", "Laila", "Khaled", "laila@gmail.com", "encodedPassword", "Student");
+        loggedInUser = MockDataFunctions.mockAddedUser("S01", "Laila", "Khaled", "laila@gmail.com", "encodedPassword", constants.ROLE_STUDENT);
         jwtToken = "abcdefg";
         expirationTime = 3600;
     }
@@ -62,7 +63,7 @@ class AuthenticationTest {
     void testRegisterStudent() {
         ResponseEntity<?> response = authenticationController.register(createStudentData);
         assertEquals(403, response.getStatusCodeValue());
-        assertEquals("Access Denied: you are unauthorized", response.getBody());
+        assertEquals(constants.ERROR_UNAUTHORIZED, response.getBody());
         verifyNoInteractions(authenticationService);
     }
 

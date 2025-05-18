@@ -13,7 +13,7 @@ import java.util.List;
 //    private String lastName;
 //    private String email;
 //    private String password;
-//    private String role; // Role can be "Student", "Instructor", or "Administrator"
+//    private String role; // Role can be constants.ROLE_STUDENT, constants.ROLE_INSTRUCTOR, or "Administrator"
 //    private Date createdAt;
 //    private Date updatedAt;
 //

@@ -1,6 +1,7 @@
 package com.lms.presentation;
 
 import com.lms.business.models.QuizRequest;
+import com.lms.constants.constants;
 import com.lms.events.CourseNotificationEvent;
 import com.lms.events.NotificationEvent;
 import com.lms.persistence.Course;
@@ -32,10 +33,10 @@ public class QuizController {
     if (currentUser.isEmpty()) {
       return ResponseEntity.status(404).build();
     }
-    if (!"Instructor".equals(currentUser.get().getRole())) {
+    if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
       return ResponseEntity
         .status(403)
-        .body("Access Denied: You are unauthorized");
+        .body(constants.ERROR_UNAUTHORIZED);
     }
 
     try {
@@ -51,7 +52,7 @@ public class QuizController {
       String studentMessage = "New quiz " + quiz.getId() + " \"" +quiz.getName() + "\"" +" in course " + quiz.getCourseId() + " number of questions is " + quiz.getNumberOfQuestions() + " quiz duration is " + quiz.getDuration();
       eventPublisher.publishEvent(new CourseNotificationEvent(this, quiz.getCourseId(), studentMessage));
       String instructorMessage = "You Published new quiz successfully";
-      eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), instructorMessage, "EMAIL"));
+      eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), instructorMessage,constants.FIELD_EMAIL));
 
       return ResponseEntity.ok(quiz);
     } catch (IllegalArgumentException e) {
@@ -77,14 +78,14 @@ public class QuizController {
     if (currentUser.isEmpty()) {
       return ResponseEntity.status(404).build();
     }
-    if (!"Instructor".equals(currentUser.get().getRole())) {
+    if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
       return ResponseEntity
         .status(403)
-        .body("Access Denied: You are unauthorized");
+        .body(constants.ERROR_UNAUTHORIZED);
     }
 
       String instructorMessage = "You Deleted quiz " + quizId + " successfully";
-      eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), instructorMessage, "EMAIL"));
+      eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), instructorMessage,constants.FIELD_EMAIL));
 
 
       service.markQuizAsDeleted(quizId);
@@ -98,16 +99,16 @@ public class QuizController {
     if (currentUser.isEmpty()) {
       return ResponseEntity.status(404).build();
     }
-    if (!"Instructor".equals(currentUser.get().getRole())) {
+    if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
       return ResponseEntity
         .status(403)
-        .body("Access Denied: You are unauthorized");
+        .body(constants.ERROR_UNAUTHORIZED);
     }
 
     service.markQuizAsOpened(quizId);
 
     String instructorMessage = "You Marked quiz " + quizId + " as opened successfully";
-    eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), instructorMessage, "EMAIL"));
+    eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), instructorMessage,constants.FIELD_EMAIL));
 
       return ResponseEntity.ok().body("Quiz " + quizId + " mark as opened");
   }
@@ -122,10 +123,10 @@ public class QuizController {
     if (currentUser.isEmpty()) {
       return ResponseEntity.status(404).build();
     }
-    if (!"Student".equals(currentUser.get().getRole())) {
+    if (!constants.ROLE_STUDENT.equals(currentUser.get().getRole())) {
       return ResponseEntity
         .status(403)
-        .body("Access Denied: You are unauthorized");
+        .body(constants.ERROR_UNAUTHORIZED);
     }
     Quiz quiz = service.getQuizById(quizId);
     if (quiz == null){
@@ -145,10 +146,10 @@ public class QuizController {
       if (submission != null) {
 
           String studentMessage = "You submitted quiz " + quizId + " successfully" + ", Your score is: \" " + submission.getScore() + " of " + submission.getGrade();
-          eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), studentMessage, "EMAIL"));
+          eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), studentMessage,constants.FIELD_EMAIL));
 
           String instructorMessage = "New submission for quiz " + quizId + " from " + currentUser.get().getId();
-          eventPublisher.publishEvent(new NotificationEvent(this, quiz.getInstructorId(), instructorMessage, "EMAIL"));
+          eventPublisher.publishEvent(new NotificationEvent(this, quiz.getInstructorId(), instructorMessage,constants.FIELD_EMAIL));
 
           return ResponseEntity.ok(submission);
       } else {
@@ -169,10 +170,10 @@ public class QuizController {
       return ResponseEntity.status(404).build();
     }
 
-    if (!"Instructor".equals(currentUser.get().getRole())) {
+    if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
       return ResponseEntity
         .status(403)
-        .body("Access Denied: You are unauthorized");
+        .body(constants.ERROR_UNAUTHORIZED);
     }
 
     return ResponseEntity.ok(service.getAllSubmissions());
@@ -188,10 +189,10 @@ public class QuizController {
       return ResponseEntity.status(404).build();
     }
 
-    if (!"Instructor".equals(currentUser.get().getRole())) {
+    if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
       return ResponseEntity
         .status(403)
-        .body("Access Denied: You are unauthorized");
+        .body(constants.ERROR_UNAUTHORIZED);
     }
 
     return ResponseEntity.ok(service.getQuizSubmissionsByQuiz(quizId));

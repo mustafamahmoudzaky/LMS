@@ -2,6 +2,7 @@ package com.lms;
 
 import java.lang.reflect.Field;
 
+import com.lms.constants.constants;
 import com.lms.events.NotificationEvent;
 import com.lms.persistence.Course;
 import com.lms.persistence.Enrollment;
@@ -73,7 +74,7 @@ class EnrollmentControllerTest {
         when(userDetails.getUsername()).thenReturn("student@example.com");
 
         User user = new User();
-        user.setRole("Student");
+        user.setRole(constants.ROLE_STUDENT);
         user.setId("S01");
 
         Course course = new Course("101", "JAVA", "Programming language", 3, "P01");
@@ -120,7 +121,7 @@ void testGetEnrollmentsByCourse() {
     when(authentication.getPrincipal()).thenReturn(userDetails);
     when(userDetails.getUsername()).thenReturn("instructor@example.com");
     User user = new User();
-    user.setRole("Instructor");
+    user.setRole(constants.ROLE_INSTRUCTOR);
     user.setId("I01");
     when(userService.findByEmail("instructor@example.com")).thenReturn(Optional.of(user));
     Enrollment enrollment = new Enrollment("E1", "S01", "101");

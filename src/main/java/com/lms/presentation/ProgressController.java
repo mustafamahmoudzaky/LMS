@@ -3,6 +3,7 @@ package com.lms.presentation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lms.business.models.CourseProgress;
 import com.lms.business.models.StudentProgress;
+import com.lms.constants.constants;
 import com.lms.persistence.User;
 import com.lms.service.impl.ServiceFacade;
 import java.util.Collections;
@@ -31,10 +32,10 @@ public class ProgressController {
         .status(HttpStatus.UNAUTHORIZED)
         .body(Collections.emptyList());
     }
-    if (!"Instructor".equals(currentUser.get().getRole())) {
+    if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
       return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
-        .body("Access Denied: You are unauthorized");
+        .body(constants.ERROR_UNAUTHORIZED);
     }
     List<StudentProgress> studentsProgresses = service.getAllStudentProgress();
     return ResponseEntity.ok(studentsProgresses);
@@ -49,10 +50,10 @@ public class ProgressController {
     if (currentUser.isEmpty()) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
-    if (!"Instructor".equals(currentUser.get().getRole())) {
+    if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
       return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
-        .body("Access Denied: You are unauthorized");
+        .body(constants.ERROR_UNAUTHORIZED);
     }
 
     // check if studentId is exist
@@ -78,10 +79,10 @@ public class ProgressController {
     if (currentUser.isEmpty()) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
-    if (!"Instructor".equals(currentUser.get().getRole())) {
+    if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
       return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
-        .body("Access Denied: You are unauthorized");
+        .body(constants.ERROR_UNAUTHORIZED);
     }
 
     if (!service.isUserExist(studentId)) {
@@ -92,7 +93,7 @@ public class ProgressController {
     if (service.findCourseById(courseId) == null) {
       return ResponseEntity
         .status(HttpStatus.NOT_FOUND)
-        .body("Course not found");
+        .body(constants.ERROR_COURSE_NOT_FOUND);
     }
 
      if (service.getEnrollmentsByCourse(courseId).stream().noneMatch(enrollment -> enrollment.getsId().equals(studentId) )) {
@@ -120,16 +121,16 @@ public class ProgressController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
-    if (!"Instructor".equals(currentUser.get().getRole())) {
+    if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
       return ResponseEntity
         .status(HttpStatus.FORBIDDEN)
-        .body("Access Denied: You are unauthorized");
+        .body(constants.ERROR_UNAUTHORIZED);
     }
 
     if (service.findCourseById(courseId) == null) {
       return ResponseEntity
         .status(HttpStatus.NOT_FOUND)
-        .body("Course not found");
+        .body(constants.ERROR_COURSE_NOT_FOUND);
     }
 
     CourseProgress courseProgress = service.getCourseProgress(courseId);

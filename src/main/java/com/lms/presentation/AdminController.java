@@ -1,5 +1,6 @@
 package com.lms.presentation;
 
+import com.lms.constants.constants;
 import com.lms.persistence.RegisterUserDto;
 import com.lms.persistence.User;
 import com.lms.service.AuthenticationService;
@@ -33,8 +34,8 @@ public class AdminController {
         if (currentUser.isEmpty()) {
             return ResponseEntity.status(404).body("Current user not found.");
         }
-        if (!"Admin".equals(currentUser.get().getRole())) {
-            return ResponseEntity.status(403).body("Access Denied: Access Denied: you are unauthorized");
+        if (!constants.ROLE_ADMIN.equals(currentUser.get().getRole())) {
+            return ResponseEntity.status(403).body(" constants.ERROR_UNAUTHORIZED");
         }
         User createdUser = authenticationService.signup(registerUserDto);
 

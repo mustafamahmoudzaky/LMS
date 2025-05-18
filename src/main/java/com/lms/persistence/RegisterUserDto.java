@@ -1,11 +1,13 @@
 package com.lms.persistence;
+import com.lms.constants.constants;
+
 
 //public class RegisterUserDto {
 //    private String firstName;
 //    private String lastName;
 //    private String email;
 //    private String password;
-//    private String role; // "Student", "Instructor", or "Administrator"
+//    private String role; // constants.ROLE_STUDENT, constants.ROLE_INSTRUCTOR, or "Administrator"
 //
 //    // Getters and Setters
 //    public String getFirstName() {

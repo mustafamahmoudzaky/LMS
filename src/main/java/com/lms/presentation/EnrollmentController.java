@@ -1,5 +1,6 @@
 package com.lms.presentation;
 
+import com.lms.constants.constants;
 import com.lms.events.CourseNotificationEvent;
 import com.lms.events.NotificationEvent;
 import com.lms.persistence.Course;
@@ -47,21 +48,21 @@ public class EnrollmentController {
         if (currentUser.isEmpty()) {
             return ResponseEntity.status(404).build();
         }
-        if (!"Student".equals(currentUser.get().getRole())) {
-            return ResponseEntity.status(403).body("Access Denied: Access Denied: you are unauthorized");
+        if (!constants.ROLE_STUDENT.equals(currentUser.get().getRole())) {
+            return ResponseEntity.status(403).body("constants.ERROR_UNAUTHORIZED");
         }
 
         Course course = courseService.findCourseById(courseId);
         if (course == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(constants.ERROR_COURSE_NOT_FOUND);
         }
 
         enrollmentService.enrollStudent(studentId, courseId);
 
         String studentMessage = "you Enrolled in course " + courseId + " successfully";
-        eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), studentMessage, "EMAIL"));
+        eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), studentMessage,constants.FIELD_EMAIL));
         String instructorMessage = "New Student "+ studentId +" Enrolled in course  " + courseId + " \"" + course.getTitle() + "\"";
-        eventPublisher.publishEvent(new NotificationEvent(this, course.getProfid(), instructorMessage, "EMAIL"));
+        eventPublisher.publishEvent(new NotificationEvent(this, course.getProfid(), instructorMessage,constants.FIELD_EMAIL));
 
         return ResponseEntity.ok("Student enrolled successfully");
     }

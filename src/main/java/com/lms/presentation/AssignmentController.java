@@ -1,6 +1,7 @@
 package com.lms.presentation;
 
 import com.lms.business.models.AssignmentModel;
+import com.lms.constants.constants;
 import com.lms.events.CourseNotificationEvent;
 import com.lms.events.NotificationEvent;
 import com.lms.persistence.User;
@@ -35,18 +36,18 @@ public class AssignmentController {
         if (currentUser.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body("Not authenticated");
+                    .body(constants.ERROR_NOT_AUTHENTICATED);
         }
-        if (!"Instructor".equals(currentUser.get().getRole())) {
+        if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
-                    .body("Access Denied: You are unauthorized");
+                    .body(constants.ERROR_UNAUTHORIZED);
         }
 
         if (service.findCourseById(courseId) == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body("Course not found");
+                    .body(constants.ERROR_COURSE_NOT_FOUND);
         }
         AssignmentEntity entity = service.createAssignment(model, courseId, currentUser.get().getId());
 
@@ -54,7 +55,7 @@ public class AssignmentController {
             // Publish a notification event for all students enrolled in the course
             String message = "New assignment created successfully.";
             eventPublisher.publishEvent(new CourseNotificationEvent(this, courseId, message));
-            eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), message, "EMAIL"));
+            eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), message,constants.FIELD_EMAIL));
 
             return ResponseEntity.ok(
                     "Assignment " + entity.getId() + " created successfully."
@@ -79,7 +80,7 @@ public class AssignmentController {
         if (service.findCourseById(courseId) == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body("Course not found");
+                    .body(constants.ERROR_COURSE_NOT_FOUND);
         }
         return ResponseEntity.ok(service.getAssignmentsByCourse(courseId));
     }
@@ -93,17 +94,17 @@ public class AssignmentController {
         if (currentUser.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body("Not authenticated");
+                    .body(constants.ERROR_NOT_AUTHENTICATED);
         }
-        if (!"Instructor".equals(currentUser.get().getRole())) {
+        if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
-                    .body("Access Denied: You are unauthorized");
+                    .body(constants.ERROR_UNAUTHORIZED);
         }
         if (service.findCourseById(courseId) == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body("Course not found");
+                    .body(constants.ERROR_COURSE_NOT_FOUND);
         }
 
         if (service.findAssignmentById(id) == null) {
@@ -114,7 +115,7 @@ public class AssignmentController {
         boolean isDeleted = service.deleteAssignment(id, courseId);
         if (isDeleted) {
             String message = "Assignment " + id + " deleted successfully.";
-            eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), message, "EMAIL"));
+            eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), message,constants.FIELD_EMAIL));
             return ResponseEntity.ok("Assignment status changed to 'Deleted'.");
         } else {
             return ResponseEntity
@@ -133,18 +134,18 @@ public class AssignmentController {
         if (currentUser.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body("Not authenticated");
+                    .body(constants.ERROR_NOT_AUTHENTICATED);
         }
-        if (!"Instructor".equals(currentUser.get().getRole())) {
+        if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
-                    .body("Access Denied: You are unauthorized");
+                    .body(constants.ERROR_UNAUTHORIZED);
         }
 
         if (service.findCourseById(courseId) == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body("Course not found");
+                    .body(constants.ERROR_COURSE_NOT_FOUND);
         }
 
         if (service.findAssignmentById(id) == null) {
@@ -157,7 +158,7 @@ public class AssignmentController {
             // Publish a notification event for all students enrolled in the course
             String message = "Assignment " + id + " has been edited";
             eventPublisher.publishEvent(new CourseNotificationEvent(this, courseId, message + " check it out 👀"));
-            eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), message, "EMAIL"));
+            eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), message,constants.FIELD_EMAIL));
 
             return ResponseEntity.ok("Assignment updated successfully.");
         } else {
