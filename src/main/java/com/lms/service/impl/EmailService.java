@@ -1,17 +1,17 @@
 package com.lms.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
-
-import static java.awt.SystemColor.text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class EmailService {
 
+    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
     private final JavaMailSender mailSender;
 
     @Autowired
@@ -28,12 +28,12 @@ public class EmailService {
             messageHelper.setText(body);
         };
 
-        System.out.println("Sending email to " + to);
+        logger.info("Sending email to {}", to);
         try {
             mailSender.send(preparator);
-            System.out.println("Email sent successfully to " + to);
+            logger.info("Email sent successfully to {}", to);
         } catch (Exception e) {
-            System.out.println("Email could not be sent to " + to);
+            logger.error("Email could not be sent to {}", to, e);
         }
     }
 }
