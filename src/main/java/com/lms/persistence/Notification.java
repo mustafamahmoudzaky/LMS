@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Notification {
-    private String id = UUID.randomUUID().toString().replaceAll("-", "").substring(0,6);
+    private String id = UUID.randomUUID().toString().replace("-", "").substring(0,6);
     private String userId;
     private String message;
     private boolean isRead = false;

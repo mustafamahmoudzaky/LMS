@@ -56,7 +56,7 @@ class QuizServiceImpl implements QuizService {
     );
 
     Quiz quiz = new Quiz(
-      UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6),
+      UUID.randomUUID().toString().replace("-", "").substring(0, 6),
       courseId,
       name,
             instructorId,

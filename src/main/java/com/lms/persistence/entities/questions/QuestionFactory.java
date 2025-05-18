@@ -13,7 +13,7 @@ public class QuestionFactory {
     switch (type) {
       case "MCQ":
         return new MCQQuestion(
-          UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6),
+          UUID.randomUUID().toString().replace("-", "").substring(0, 6),
           questionRequest.getQuestionText(),
           questionRequest.getGrade(),
           questionRequest.getOptions(),
@@ -21,14 +21,14 @@ public class QuestionFactory {
         );
       case "TrueFalse":
         return new TrueFalseQuestion(
-          UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6),
+          UUID.randomUUID().toString().replace("-", "").substring(0, 6),
           questionRequest.getQuestionText(),
           questionRequest.getGrade(),
           questionRequest.getCorrectAnswerBoolean()
         );
       case "ShortAnswer":
         return new ShortAnswerQuestion(
-          UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6),
+          UUID.randomUUID().toString().replace("-", "").substring(0, 6),
           questionRequest.getQuestionText(),
           questionRequest.getGrade(),
           questionRequest.getCorrectAnswer()
