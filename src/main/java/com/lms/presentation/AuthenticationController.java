@@ -7,6 +7,7 @@ import com.lms.persistence.RegisterUserDto;
 import com.lms.persistence.User;
 import com.lms.service.AuthenticationService;
 import com.lms.service.JwtService;
+import com.lms.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,10 +21,12 @@ public class AuthenticationController {
     private final JwtService jwtService;
 
     private final AuthenticationService authenticationService;
+    private final UserService userService;
 
-    public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService) {
+    public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService, UserService userService) {
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
+        this.userService = userService;
     }
 
 //    @PostMapping("/signup")
@@ -38,6 +41,16 @@ public class AuthenticationController {
         if (!constants.ROLE_ADMIN.equals(registerUserDto.getRole())) {
             return ResponseEntity.status(403).body(constants.ERROR_UNAUTHORIZED);
         }
+        if(userService.findById(registerUserDto.getId()) != null) {
+            System.out.println("Duplicated Id");
+            return ResponseEntity.status(409).body("Id already in use.");
+        }
+
+        if(userService.findByEmail(registerUserDto.getEmail()).isPresent()) {
+            System.out.println("Duplicated Email");
+            return ResponseEntity.status(409).body("Email already in use.");
+        }
+
         User registeredUser = authenticationService.signup(registerUserDto);
         return ResponseEntity.ok(registeredUser);
     }
