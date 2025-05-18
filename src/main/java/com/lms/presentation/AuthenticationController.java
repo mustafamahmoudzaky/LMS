@@ -42,10 +42,12 @@ public class AuthenticationController {
         }
 
         if(userService.findById(registerUserDto.getId()) != null) {
+            System.out.println("Duplicated Id");
             return ResponseEntity.status(409).body("Id already in use.");
         }
 
         if(userService.findByEmail(registerUserDto.getEmail()).isPresent()) {
+            System.out.println("Duplicated Email");
             return ResponseEntity.status(409).body("Email already in use.");
         }
 
