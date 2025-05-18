@@ -1,5 +1,6 @@
 package com.lms.listeners;
 
+import com.lms.constants.constants;
 import com.lms.events.NotificationEvent;
 import com.lms.manager.NotificationManager;
 import com.lms.persistence.Notification;
@@ -40,7 +41,7 @@ public class NotificationEventListener {
 
         // Simulate notification sending
         switch (event.getNotificationType()) {
-            caseconstants.FIELD_EMAIL:
+            case constants.FIELD_EMAIL:
                 sendEmailNotification(event);
                 break;
             case "SMS":
