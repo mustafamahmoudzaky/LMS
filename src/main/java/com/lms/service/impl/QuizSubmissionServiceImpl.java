@@ -49,7 +49,7 @@ class QuizSubmissionServiceImpl implements QuizSubmissionService {
     List<Question> questions = quiz.getSelectedQuestions();
     QuizSubmission submission = new QuizSubmission();
     submission.setId(
-      UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6)
+      UUID.randomUUID().toString().replace("-", "").substring(0, 6)
     );
     submission.setQuizId(quizId);
     submission.setStudentId(studentId);

@@ -28,7 +28,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course createCourse(Course course) {
-        course.setId(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6)); // Generate unique ID
+        course.setId(UUID.randomUUID().toString().replace("-", "").substring(0, 6)); // Generate unique ID
         courseList.add(course);
         return course;
     }
