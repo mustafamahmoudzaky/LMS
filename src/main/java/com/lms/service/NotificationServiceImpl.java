@@ -24,7 +24,7 @@ public class NotificationServiceImpl {
 
     // Add a new notification
     public void addNotification(Notification notification) {
-        eventPublisher.publishEvent(new NotificationEvent(this, notification.getUserId(), notification.getMessage(), "EMAIL"));
+        eventPublisher.publishEvent(new NotificationEvent(this, notification.getUserId(), notification.getMessage(),constants.FIELD_EMAIL));
     }
 
     // Get all notifications

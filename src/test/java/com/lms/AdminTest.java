@@ -1,5 +1,6 @@
 package com.lms;
 
+import com.lms.constants.constants;
 import com.lms.persistence.RegisterUserDto;
 import com.lms.persistence.User;
 import com.lms.presentation.AdminController;
@@ -52,10 +53,10 @@ class AdminTest {
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getPrincipal()).thenReturn(userDetails);
-        adminRegisterUserDto = MockDataFunctions.mockRegisteredUser("A01", "Ahmed", "Elbeltagy", "ahmed@gmail.com", "password123", "Admin");
-        studentRegisterUserDto = MockDataFunctions.mockRegisteredUser("S01", "Laila", "Khaled", "laila@gmail.com", "password123", "Student");
-        registeredAdmin = MockDataFunctions.mockAddedUser("A01", "ahmed@gmail.com", "Admin");
-        registeredStudent = MockDataFunctions.mockAddedUser("S01", "laila@gmail.com", "Student");
+        adminRegisterUserDto = MockDataFunctions.mockRegisteredUser("A01", "Ahmed", "Elbeltagy", "ahmed@gmail.com", "password123", constants.ROLE_ADMIN);
+        studentRegisterUserDto = MockDataFunctions.mockRegisteredUser("S01", "Laila", "Khaled", "laila@gmail.com", "password123", constants.ROLE_STUDENT);
+        registeredAdmin = MockDataFunctions.mockAddedUser("A01", "ahmed@gmail.com", constants.ROLE_ADMIN);
+        registeredStudent = MockDataFunctions.mockAddedUser("S01", "laila@gmail.com", constants.ROLE_STUDENT);
     }
 
     @Test
@@ -74,6 +75,6 @@ class AdminTest {
         when(userService.findByEmail("laila@gmail.com")).thenReturn(Optional.of(registeredStudent));
         ResponseEntity<?> response = adminController.createUser(studentRegisterUserDto);
         assertEquals(403, response.getStatusCodeValue());
-        assertEquals("Access Denied: Access Denied: you are unauthorized", response.getBody());
+        assertEquals("constants.ERROR_UNAUTHORIZED", response.getBody());
     }
 }

@@ -40,7 +40,7 @@ public class NotificationEventListener {
 
         // Simulate notification sending
         switch (event.getNotificationType()) {
-            case "EMAIL":
+            caseconstants.FIELD_EMAIL:
                 sendEmailNotification(event);
                 break;
             case "SMS":

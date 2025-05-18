@@ -5,6 +5,7 @@ import java.util.Optional;
 
 
 import com.lms.business.models.NotificationRequest;
+import com.lms.constants.constants;
 import com.lms.persistence.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,14 +35,14 @@ public class NotificationController {
         if (currentUser.isEmpty()) {
             return ResponseEntity.status(404).build();
         }
-        if (!"Instructor".equals(currentUser.get().getRole()) && !"Admin".equals(currentUser.get().getRole())) {
+        if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole()) && !constants.ROLE_ADMIN.equals(currentUser.get().getRole())) {
             return ResponseEntity
                     .status(403)
-                    .body("Access Denied: You are unauthorized");
+                    .body(constants.ERROR_UNAUTHORIZED);
         }
 
         if(service.findUserById(notification.getUserId()) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(constants.ERROR_USER_NOT_FOUND);
         }
 
         notificationService.addNotification(notification);
@@ -116,7 +117,7 @@ public class NotificationController {
             return ResponseEntity.status(404).build();
         }
         if (!notificationService.isUserNotification(currentUser.get().getId(), notificationId)) {
-            return ResponseEntity.status(403).body("Access Denied: You are unauthorized to mark this notification as read");
+            return ResponseEntity.status(403).body("constants.ERROR_UNAUTHORIZED to mark this notification as read");
         }
         try {
             notificationService.markNotificationAsRead(notificationId);
@@ -129,7 +130,7 @@ public class NotificationController {
     @PostMapping("/course/{courseId}")
     public ResponseEntity<String> notifyStudentsInCourse(@PathVariable String courseId, @RequestBody NotificationRequest request) {
         if(service.findCourseById(courseId) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(constants.ERROR_COURSE_NOT_FOUND);
         }
         notificationService.notifyStudents(courseId, request.getMessage());
         return ResponseEntity.ok("Course Notification added successfully!");

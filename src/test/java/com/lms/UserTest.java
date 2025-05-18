@@ -1,5 +1,6 @@
 package com.lms;
 
+import com.lms.constants.constants;
 import com.lms.persistence.UpdateUserDto;
 import com.lms.persistence.User;
 import com.lms.persistence.UserInfoDto;
@@ -55,7 +56,7 @@ class UserTest {
                 .setLastName("Khaled")
                 .setEmail("laila@gmail.com")
                 .setPassword("password123")
-                .setRole("Student");
+                .setRole(constants.ROLE_STUDENT);
 
         userInfoDto = new UserInfoDto(
                 currentUser.getId(),

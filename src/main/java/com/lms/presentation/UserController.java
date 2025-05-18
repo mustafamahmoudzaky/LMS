@@ -93,7 +93,7 @@ public class UserController {
 //        if (currentUser.isEmpty()) {
 //            return ResponseEntity.status(404).body("Current user not found.");
 //        }
-//        if (!"Admin".equals(currentUser.get().getRole())) {
+//        if (!constants.ROLE_ADMIN.equals(currentUser.get().getRole())) {
 //            return ResponseEntity.status(403).body("Access Denied: Only Admins can create new users.");
 //        }
 //        User createdUser = authenticationService.signup(registerUserDto);

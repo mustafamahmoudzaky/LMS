@@ -1,6 +1,7 @@
 package com.lms.presentation;
 
 import com.lms.business.models.QuestionRequest;
+import com.lms.constants.constants;
 import com.lms.persistence.Course;
 import com.lms.persistence.User;
 import com.lms.persistence.entities.questions.Question;
@@ -54,38 +55,38 @@ class QuestionBankControllerTest {
 
         verify(service, never()).addQuestion(any(), any());
         assert response.getStatusCode() == HttpStatus.UNAUTHORIZED;
-        assert Objects.equals(response.getBody(), "Not authenticated");
+        assert Objects.equals(response.getBody(), constants.ERROR_NOT_AUTHENTICATED);
     }
 
     @Test
     void testAddQuestion_forbidden() {
         when(service.getCurrentUser()).thenReturn(Optional.of(currentUser));
-        when(currentUser.getRole()).thenReturn("Student");
+        when(currentUser.getRole()).thenReturn(constants.ROLE_STUDENT);
 
         ResponseEntity<String> response = questionBankController.addQuestion(courseId, questionRequest);
 
         verify(service, never()).addQuestion(any(), any());
         assert response.getStatusCode() == HttpStatus.FORBIDDEN;
-        assert Objects.equals(response.getBody(), "Access Denied: You are unauthorized");
+        assert Objects.equals(response.getBody(), constants.ERROR_UNAUTHORIZED);
     }
 
     @Test
     void testAddQuestion_courseNotFound() {
         when(service.getCurrentUser()).thenReturn(Optional.of(currentUser));
-        when(currentUser.getRole()).thenReturn("Instructor");
+        when(currentUser.getRole()).thenReturn(constants.ROLE_INSTRUCTOR);
         when(service.findCourseById(courseId)).thenReturn(null);
 
         ResponseEntity<String> response = questionBankController.addQuestion(courseId, questionRequest);
 
         verify(service, never()).addQuestion(any(), any());
         assert response.getStatusCode() == HttpStatus.BAD_REQUEST;
-        assert Objects.equals(response.getBody(), "Course not found");
+        assert Objects.equals(response.getBody(), constants.ERROR_COURSE_NOT_FOUND);
     }
 
     @Test
     void testAddQuestion_success() {
         when(service.getCurrentUser()).thenReturn(Optional.of(currentUser));
-        when(currentUser.getRole()).thenReturn("Instructor");
+        when(currentUser.getRole()).thenReturn(constants.ROLE_INSTRUCTOR);
         when(service.findCourseById(courseId)).thenReturn(course);
 
 //        // Mock the type and other fields for the questionRequest
@@ -110,7 +111,7 @@ class QuestionBankControllerTest {
 
         verify(service, never()).addQuestion(any(), any());
         assert response.getStatusCode() == HttpStatus.UNAUTHORIZED;
-        assert Objects.equals(response.getBody(), "Not authenticated");
+        assert Objects.equals(response.getBody(), constants.ERROR_NOT_AUTHENTICATED);
     }
 
     @Test
@@ -121,38 +122,38 @@ class QuestionBankControllerTest {
 
         verify(service, never()).deleteQuestion(any(), any());
         assert response.getStatusCode() == HttpStatus.UNAUTHORIZED;
-        assert Objects.equals(response.getBody(), "Not authenticated");
+        assert Objects.equals(response.getBody(), constants.ERROR_NOT_AUTHENTICATED);
     }
 
     @Test
     void testDeleteQuestion_forbidden() {
         when(service.getCurrentUser()).thenReturn(Optional.of(currentUser));
-        when(currentUser.getRole()).thenReturn("Student");
+        when(currentUser.getRole()).thenReturn(constants.ROLE_STUDENT);
 
         ResponseEntity<String> response = questionBankController.deleteQuestion(courseId, questionId);
 
         verify(service, never()).deleteQuestion(any(), any());
         assert response.getStatusCode() == HttpStatus.FORBIDDEN;
-        assert Objects.equals(response.getBody(), "Access Denied: You are unauthorized");
+        assert Objects.equals(response.getBody(), constants.ERROR_UNAUTHORIZED);
     }
 
     @Test
     void testDeleteQuestion_courseNotFound() {
         when(service.getCurrentUser()).thenReturn(Optional.of(currentUser));
-        when(currentUser.getRole()).thenReturn("Instructor");
+        when(currentUser.getRole()).thenReturn(constants.ROLE_INSTRUCTOR);
         when(service.findCourseById(courseId)).thenReturn(null);
 
         ResponseEntity<String> response = questionBankController.deleteQuestion(courseId, questionId);
 
         verify(service, never()).deleteQuestion(any(), any());
         assert response.getStatusCode() == HttpStatus.BAD_REQUEST;
-        assert Objects.equals(response.getBody(), "Course not found");
+        assert Objects.equals(response.getBody(), constants.ERROR_COURSE_NOT_FOUND);
     }
 
     @Test
     void testDeleteQuestion_success() {
         when(service.getCurrentUser()).thenReturn(Optional.of(currentUser));
-        when(currentUser.getRole()).thenReturn("Instructor");
+        when(currentUser.getRole()).thenReturn(constants.ROLE_INSTRUCTOR);
         when(service.findCourseById(courseId)).thenReturn(course);
 
         ResponseEntity<String> response = questionBankController.deleteQuestion(courseId, questionId);
@@ -180,25 +181,25 @@ class QuestionBankControllerTest {
         ResponseEntity<Object> response = questionBankController.getQuestions(courseId);
 
         assert response.getStatusCode() == HttpStatus.FORBIDDEN;
-        assert Objects.equals(response.getBody(), "Access Denied: You are unauthorized");
+        assert Objects.equals(response.getBody(), constants.ERROR_UNAUTHORIZED);
     }
 
     @Test
     void testGetQuestions_courseNotFound() {
         when(service.getCurrentUser()).thenReturn(Optional.of(currentUser));
-        when(currentUser.getRole()).thenReturn("Instructor");
+        when(currentUser.getRole()).thenReturn(constants.ROLE_INSTRUCTOR);
         when(service.findCourseById(courseId)).thenReturn(null);
 
         ResponseEntity<Object> response = questionBankController.getQuestions(courseId);
 
         assert response.getStatusCode() == HttpStatus.BAD_REQUEST;
-        assert Objects.equals(response.getBody(), "Course not found");
+        assert Objects.equals(response.getBody(), constants.ERROR_COURSE_NOT_FOUND);
     }
 
     @Test
     void testGetQuestions_success() {
         when(service.getCurrentUser()).thenReturn(Optional.of(currentUser));
-        when(currentUser.getRole()).thenReturn("Instructor");
+        when(currentUser.getRole()).thenReturn(constants.ROLE_INSTRUCTOR);
         when(service.findCourseById(courseId)).thenReturn(course);
         when(service.getQuestions(courseId)).thenReturn(List.of(question));
 

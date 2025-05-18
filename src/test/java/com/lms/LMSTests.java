@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.lms.business.models.QuestionRequest;
+import com.lms.constants.constants;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -67,7 +68,7 @@ class LMSTests {
                         "Doe",
                         adminEmail,
                         adminPassword,
-                        "Admin"
+                        constants.ROLE_ADMIN
                 );
 
                 // System.out.println(
@@ -97,7 +98,7 @@ class LMSTests {
                     "Doe",
                     instructorEmail,
                     instructorPassword,
-                    "Instructor"
+                    constants.ROLE_INSTRUCTOR
             );
 
             System.out.println("Instructor created: " + createInstructor.code);
@@ -134,7 +135,7 @@ class LMSTests {
                     "Doe",
                     studentEmail,
                     studentPassword,
-                    "Student"
+                    constants.ROLE_STUDENT
             );
 
             System.out.println("Student created: " + createStudent.code);

@@ -1,5 +1,6 @@
 package com.lms.presentation;
 
+import com.lms.constants.constants;
 import com.lms.persistence.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +23,7 @@ public class ApplicationConfiguration {
     @Bean
     UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException(constants.ERROR_USER_NOT_FOUND));
     }
 
     @Bean

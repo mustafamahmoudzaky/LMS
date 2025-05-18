@@ -1,5 +1,6 @@
 package com.lms.presentation;
 
+import com.lms.constants.constants;
 import com.lms.events.CourseNotificationEvent;
 import com.lms.events.NotificationEvent;
 import com.lms.persistence.Course;
@@ -47,12 +48,12 @@ public class CourseController {
         if (currentUser.isEmpty()) {
             return ResponseEntity.status(404).build();
         }
-        if (!"Instructor".equals(currentUser.get().getRole())) {
-            return ResponseEntity.status(403).body("Access Denied: Access Denied: you are unauthorized");
+        if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
+            return ResponseEntity.status(403).body("constants.ERROR_UNAUTHORIZED");
         }
 
         String message = "Course " + course.getId() + " \"" + course.getTitle() + "\"" + " created successfully" ;
-        eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), message, "EMAIL"));
+        eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), message,constants.FIELD_EMAIL));
         course.setProfid(currentUser.get().getId());
         Course newCourse = courseService.createCourse(course);
         return ResponseEntity.ok("Course " + newCourse.getId() + " created successfully!");
@@ -66,8 +67,8 @@ public class CourseController {
         if (currentUser.isEmpty()) {
             return ResponseEntity.status(404).build();
         }
-        if (!"Instructor".equals(currentUser.get().getRole())) {
-            return ResponseEntity.status(403).body("Access Denied: Access Denied: you are unauthorized");
+        if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
+            return ResponseEntity.status(403).body("constants.ERROR_UNAUTHORIZED");
         }
         Course course = courseService.findCourseById(courseId);
         if (course == null) {
@@ -89,7 +90,7 @@ public class CourseController {
             String studentMessage = "course " + courseId + " \"" + course.getTitle() + "\"" + " media updated successfully";
             eventPublisher.publishEvent(new CourseNotificationEvent(this, courseId, studentMessage));
             String instructorMessage = "You updated course  " + courseId + " \"" + course.getTitle() + "\"" + " media successfully";
-            eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), instructorMessage, "EMAIL"));
+            eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), instructorMessage,constants.FIELD_EMAIL));
 
             return ResponseEntity.ok("File uploaded successfully!");
         } catch (Exception e) {
@@ -121,8 +122,8 @@ public class CourseController {
         if (currentUser.isEmpty()) {
             return ResponseEntity.status(404).build();
         }
-        if (!"Instructor".equals(currentUser.get().getRole())) {
-            return ResponseEntity.status(403).body("Access Denied: Access Denied: you are unauthorized");
+        if (!constants.ROLE_INSTRUCTOR.equals(currentUser.get().getRole())) {
+            return ResponseEntity.status(403).body("constants.ERROR_UNAUTHORIZED");
         }
         courseService.addLessonToCourse(courseId, lesson);
         return ResponseEntity.ok("Lesson added successfully!");
